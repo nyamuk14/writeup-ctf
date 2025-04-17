@@ -183,6 +183,7 @@ We got a file named `server.unknown`.
 Downloaded the file and checked for the file type and it was an `ELF` file so I put it into my bestfriend chatgpt instead of trying the **nc 34.133.69.112 8080**.
 
 Then I decompiled it using ghidra and I saw this lines:
+
 ```bash
 pcVar2 = strstr(pcVar2,"GET /goodshit/umcs_server HTTP/13.37");
  if (pcVar2 == (char *)0x0) {
@@ -197,13 +198,22 @@ buddy\n",sVar4,
 The server code checks if the request matches the string and this check is done using the
 `strstr` function
 
-![Chat GPT](img/gpt.png)
+![Chat GPT](img/gpt1.png)
 
-So uh… this wasn’t any interesting but after I having a very very deeptalk with my brother **chatpgt** and I used the
+After analyzing the file and decompiled it with my bestfriend **chatgpt** it says that the server expects a very specific
+request format which is:
+
+```bash
+GET /goodshit/umcs_server HTTP/13.37
+```
+
+If this request is received, the server attempts to open a file `/flag` and sends its content sback to me. If the request doesn't match, the server returns a **404 Not Found error**.
+
+So uh… this wasn’t any interesting but after having a very very deeptalk with my brother chatpgt, I decided to use the `printf` command to get the exact `HTTP` `GET` request that the server expects.
+
 ```bash
 printf "GET /goodshit/umcs_server HTTP/13.37\r\n\r\n" | nc 34.133.69.112 8080
 ```
-and… I don’t know if this was intended or not but… chatgpt was explaining the 500 error and it asked me to test forging the raw `HTTP` request and… I guess…
 
 ![Flag](img/flag3.png)
 
