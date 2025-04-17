@@ -182,6 +182,21 @@ We got a file named `server.unknown`.
 
 Downloaded the file and checked for the file type and it was an `ELF` file so I put it into my bestfriend chatgpt instead of trying the **nc 34.133.69.112 8080**.
 
+Then I decompiled it using ghidra and I saw this lines:
+```bash
+pcVar2 = strstr(pcVar2,"GET /goodshit/umcs_server HTTP/13.37");
+ if (pcVar2 == (char *)0x0) {
+ sVar4 = strlen("HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\nNot here
+buddy\n");
+ send(param_1,"HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\nNot here
+buddy\n",sVar4,
+ 0);
+ }
+```
+
+The server code checks if the request matches the string and this check is done using the
+`strstr` function
+
 ![Chat GPT](img/gpt.png)
 
 So uh… this wasn’t any interesting but after I having a very very deeptalk with my brother **chatpgt** and I used the
