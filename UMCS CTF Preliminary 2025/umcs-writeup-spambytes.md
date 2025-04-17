@@ -98,5 +98,14 @@ Flag: **umcs{h1dd3n_1n_png_st3g}**
 
 ### Solution
 
+![MP4 Broken](img/mp4.png)
+
 We cant see the video because it is broken and after using `exiftool`, checked for its `hex` and everything was okay so I just thought that the `mp4` was really broken so.
+
+![Flag](img/flag1.png)
+
+I searched for an online `mp4` repair tool [EaseUS](https://repair.easeus.com/#upload) put the bad boy in to repair the broken file and boom ! we got the flag.
+
+Flag: **umcs{h1dd3n_1n_fr4me}**
+
 
