@@ -649,7 +649,7 @@ If there is no valid session, the server rejects access to protected pages.
 **Info!**
 I collected my session cookie before clicking `Collect Daily Bonus` because if I clicked it first, the server would mark my account as already claimed. By grabbing the cookie early, I could send many bonus requests manually and abuse the race condition before the claim was locked.
 
-![Session Cookies](img/sessioncookies.png)
+![Session Cookies](img/sessioncookie.png)
 
 Session Cookie:
 
