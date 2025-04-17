@@ -340,7 +340,7 @@ msfvenom -p linux/x64/exec CMD="cat /flag" -f raw -b '\x0f\x05\xcd\x80' -e x86/c
 
 Flag: **umcs{shellcoding_78b18b51641a3d8ea260e91d7d05295a}**
 
-## Liveleak
+## Liveleak (lkhwn.nzm)
 ## Description
 > No desc
 > 
@@ -481,3 +481,14 @@ p.close()
 run the exploit script. Then, got the flag!
 
 Flag: **umcs{GOT_PLT_8f925fb19309045dac4db4572435441d}**
+
+## Web
+
+### Healthcheck (lkhwn.nzm)
+### Description
+> I left my hopes_and_dreams on the server. can you help fetch it for me?
+> 
+> http://104.214.185.119/index.php
+
+UMCS provide us `index.php` on their github
+
