@@ -223,7 +223,56 @@ We were given a file full of train emojis.
 
 From the pattern, the blue train is always singular, so we instantly assume it was morse code since the spaces are required to separate the characters.
 
-![Script gpt](img/script.png)
+![Script gpt](img/morsecodescript.png)
+
+We used gpt to generate a script to convert it into dots and dash.
+
+![Decode Morsecode](img/decodemorse.png)
+
+Then we used multiple morse code decoders online to decrypt it. But not of all it works as not all morse code decoders has `#`. 
+We initially thought `E012D0A1FFFAC42D6AAE00C54078AD3E` is a md5 hash and it needs to be decrypted. But no encryption we tried worked. So I was stucked here for a while.
+
+![Hint Gist Hash](img/hint.png)
+
+Then, the admin released a hint here and instantly we knew the string earlier wasn’t an encrypted value but an address of another github page. So we pasted the hash on the url.
+
+```bash
+https://gist.github.com/umcybersec/e012d0a1fffac42d6aae00c54078ad3e
+```
+
+![Gist Hash](img/gist.png)
+
+And we got the **veryveryveryverysecret**.
+
+![Rail Fence Cipher](img/railfencecipher.png)
+
+Then we tried the only thing left that relates to trains because Samuel is obsessed with trains. **Rail fence**, because it rhymes
+With railway. We also use number **8** as the key because the morse code also translates to Samuel favourite number is 8.
+
+Then, seeing this is usually used as ascii art, we thought that maybe the text needs to be within a specific width to be something readable.
+
+![Output1](img/output1.png)
+
+![Output2](img/output2.png)
+
+![Flag](img/flag4.png)
+
+After making it wider we got the flag!!
+
+Flag: **umsc{WILLOW_TREE_CAMPSITE}**
+
+## PWN
+
+### babysc (lkhwn.nzm)
+### Description
+> shellcode
+> 
+> 34.133.69.112 port 10001
+
+`Dockerfile`, `babysc.c`, `babysc`
+
+
+
 
 
 
