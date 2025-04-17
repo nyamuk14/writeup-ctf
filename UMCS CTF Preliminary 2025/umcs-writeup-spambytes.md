@@ -569,7 +569,7 @@ Yahooo! got the flag!
 
 Flag: **umcs{n1c3_j0b_ste4l1ng_myh0p3_4nd_dr3ams}**
 
-### Straightforward
+### Straightforward (Nyamuk)
 ### Description
 > Test out our game center. You'll have free claiming bonus for first timers!
 > 
