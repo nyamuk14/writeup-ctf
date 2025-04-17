@@ -176,6 +176,57 @@ Flag: **umcs{Richard_Is_Watching_1989}**
 
 ### Solution
 
+We got a file named `server.unknown`.
+
+![Filetype](img/serverunknown.png)
+
+Downloaded the file and checked for the file type and it was an `ELF` file so I put it into my bestfriend chatgpt instead of trying the **nc 34.133.69.112 8080**.
+
+![Chat GPT](img/gpt.png)
+
+So uh… this wasn’t any interesting but after I having a very very deeptalk with my brother **chatpgt** and I used the
+```bash
+printf "GET /goodshit/umcs_server HTTP/13.37\r\n\r\n" | nc 34.133.69.112 8080
+```
+and… I don’t know if this was intended or not but… chatgpt was explaining the 500 error and it asked me to test forging the raw `HTTP` request and… I guess…
+
+![Flag](img/flag3.png)
+
+I got the flag...!! yay.
+
+Flag: **umcs{http_server_a058712ff1da79c9c9bbf211907c65a5cd}**
+
+## Cryptography
+
+### Gist of Samuel (lkhwn.nzm & Akmlaff)
+### Description
+> Samuel is gatekeeping his favourite campsite. We found his note.
+> 
+> flag: umcs{the_name_of_the_campsite}
+> 
+> The flag is case insensitive
+
+<details>
+  <summary>Hint for 0 points</summary>
+! This is not a real hint. ! I dont remember but, its a another gist hash of umcs
+</details>
+
+`gist_of_samuel.txt`
+
+---
+
+### Solution
+
+![Content of gist_of_samuel.txt](img/train.png)
+
+We were given a file full of train emojis.
+
+From the pattern, the blue train is always singular, so we instantly assume it was morse code since the spaces are required to separate the characters.
+
+![Script gpt](img/script.png)
+
+
+
 
 
 
