@@ -21,7 +21,6 @@
 
 [chall.pcapng](forensics/noupdates) 
 
----
 
 ### Solution
 
@@ -74,7 +73,6 @@ Flag: **UMASS{n07_ag41n_d4mn_y0u_m3t4spl017}**
 
 [macrotrace-assets.zip](forensics/macrotrace)
 
----
 
 ### Solution
 
@@ -177,11 +175,10 @@ The oddoneout challenge is multilayer! You'll know you have the right one if it 
 
 [OddOneOut.png](misc/oddoneout)
 
----
 
 ### Solution
 
-Just to tell you guys that, I solved this chall for 5-6 hours. It was super easy chall actually.
+Just to tell you guys that, I solved this chall for 5-6 hours. It was super easy chall actually. I wasted my times for a script that extract each of QR codes like 4x4 or 8x8. I don't remember. Also I checked 1 by 1 of the extracted QR codes lol. This chall trolls me so hard.
 
 So, what I did is, first thing I ran `zsteg`
 
@@ -212,6 +209,50 @@ Basically **Bloxorz** is a game on coolmath games and it's a key for a cipher wh
 Lastly, just decode it
 
 ![Flag](img/misc/flag2.png)
+
+Flag: **UMASS{qrongratulations}**
+
+---
+
+### Tower Signal
+
+### Description
+> A glitched tower is still transmitting bursts of scrambled config data through its last known soundtrack. The signal isn’t digital — it’s modulated. Different baud rates. One forgotten directive.
+
+[last_output.wav](misc/towersignal)
+
+
+### Solution
+
+I ran `exiftool`:
+
+```bash
+┌──(kali㉿kali)-[~/UMassCTF2025/misc/Tower Signal]
+└─$ exiftool last_output.wav                        
+ExifTool Version Number         : 13.10
+File Name                       : last_output.wav
+Directory                       : .
+File Size                       : 38 MB
+File Modification Date/Time     : 2025:04:18 15:19:25-04:00
+File Access Date/Time           : 2025:04:18 15:19:46-04:00
+File Inode Change Date/Time     : 2025:04:18 15:19:43-04:00
+File Permissions                : -rw-rw-r--
+File Type                       : WAV
+File Type Extension             : wav
+MIME Type                       : audio/x-wav
+Encoding                        : Microsoft PCM
+Num Channels                    : 2
+Sample Rate                     : 48000
+Avg Bytes Per Sec               : 192000
+Bits Per Sample                 : 16
+Comment                         : Try 100 > 50 > 30
+Software                        : Lavf59.27.100
+Duration                        : 0:03:20
+```
+
+The comment - **Try 100 > 50 > 30**
+
+Then, I opened the audio in Audacity, switched to spectrogram view, and noticed discrete bursts of FSK-modulated audio signals.
 
 
 
