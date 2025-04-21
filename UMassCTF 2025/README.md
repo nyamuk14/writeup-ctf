@@ -20,7 +20,6 @@
 
 [chall.pcapng](forensics/noupdates/chall.pcapng) 
 
-
 ---
 
 ### Solution
@@ -71,7 +70,7 @@ Flag: **UMASS{n07_ag41n_d4mn_y0u_m3t4spl017}**
 >
 > Use `23ab3Y9/]jKl` as the password when extracting the password-protected zip archive.
 
-`macro`
+[macrotrace-assets.zip](forensics/macrotrace/macrotrace-assets.zip)
 
 
 
