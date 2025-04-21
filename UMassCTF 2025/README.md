@@ -175,7 +175,37 @@ Not all solvers will work on this. If you get stuck, try a different way!
 The oddoneout challenge is multilayer! You'll know you have the right one if it looks like a real word.
 </details>
 
-[OddOneOut.png](forensics/macrotrace)
+[OddOneOut.png](misc/oddoneout)
+
+---
+
+### Solution
+
+Just to tell you guys that, I solved this chall for 5-6 hours. It was super easy chall actually.
+
+So, what I did is, first thing I ran `zsteg`
+
+I got this:
+
+```bash
+┌──(kali㉿kali)-[~/UMassCTF2025/misc/Odd One Out]
+└─$ zsteg OddOneOut.png 
+b1,b,msb,xy         .. file: MIPSEL ECOFF executable not stripped - version 105.35
+b1,rgb,lsb,xy       .. text: "Man I REALLY like squares. I think cubes are cool too. QR codes are truly the pinnacle of modern data encoding.\n\nAlso, while you're rooting around in here, I'm taking a poll: did you ever play coolmath games as a kid?\n\nIf you did: great! I hope you played "
+b1,bgr,msb,xy       .. file: OpenPGP Public Key
+b2,g,lsb,xy         .. file: Encore unsupported executable not stripped
+b3,r,msb,xy         .. file: Applesoft BASIC program data, first line number 146
+b3,bgr,lsb,xy       .. file: gfxboot compiled html help file
+b4,b,lsb,xy         .. file: Targa image data - Map 1 x 4353 x 16 +257 "\001\021\020"
+b4,rgb,lsb,xy       .. file: Targa image data 4096 x 65536 x 1 +4097 +4113 "\020\001"
+b4,bgr,lsb,xy       .. file: PDP-11 UNIX/RT ldp
+```
+
+Then I use [aperisolve](https://www.aperisolve.com/): 
+
+
+
+
 
 
 
