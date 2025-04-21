@@ -26,4 +26,13 @@
 
 `chall.pcapng` overview:
 
-![Wireshark Protocol View](img/pcapfile.png)
+![Wireshark Chall Overview](img/forensics/chall.png)
+
+We look through the traffic and see a lot of `DNS` and `TCP` packets. There’s no `HTTP`, so we know we’ll need to dig deeper, likely a raw `TCP` shell or reverse shell session.
+
+After serveral minutes talking with my bestfriend. gpt gave me this filter command:
+
+```bash
+frame contains "flag"
+```
+
