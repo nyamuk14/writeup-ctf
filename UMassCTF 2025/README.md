@@ -311,6 +311,8 @@ XzA0ID0gWDNSdmR3bz0KVEFHXzAxID0gVTN0bWJBbz0KVEFHXzA2ID0gWlhKMGVnbz0KVEFHXzAz
 ID0gWVhOdGNnbz0K
 ```
 
+---
+
 It is a `base64` encoded value. Decode that from `base64`.
 
 **mono1.wav**:
@@ -338,6 +340,8 @@ TAG_03
  = YXNtcgo=
 ```
 
+---
+
 To simplify, this is the rearranged:
 
 ```bash
@@ -350,7 +354,7 @@ TAG_06 = ZXJ0ego=
 TAG_03 = YXNtcgo=
 ```
 
-Then, decode again from `base64` for each tag:
+Then, decode it again from `base64` for each tag:
 
 ```bash
 TAG_05 = er_h
