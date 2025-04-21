@@ -206,7 +206,7 @@ I looked at the common passwords which is **UMASS{{rcckuizufzxhznod}}** and **Bl
 
 Basically **Bloxorz** is a game on coolmath games and it's a key for a cipher which is Vigenere cipher.
 
-Lastly, just decode it
+Lastly, just decode it.
 
 ![Flag](img/misc/flag2.png)
 
@@ -253,6 +253,26 @@ Duration                        : 0:03:20
 The comment - **Try 100 > 50 > 30**
 
 Then, I opened the audio in Audacity, switched to spectrogram view, and noticed discrete bursts of FSK-modulated audio signals.
+
+![Spectogram View](img/misc/spectogram.png)
+
+Next step, I extracting the burst manually like this (select 3 bursts):
+
+![Export](img/misc/import.png)
+
+Go to File > Export Audio > Current Selection and export as `part1.wav`, `part2.wav`, `part3.wav`.
+
+Then I Converted each to mono using `ffmpeg` (required for minimodem):
+
+```bash
+ffmpeg -i part1.wav -ac 1 mono1.wav
+ffmpeg -i part2.wav -ac 1 mono2.wav
+ffmpeg -i part3.wav -ac 1 mono3.wav
+```
+
+
+
+
 
 
 
