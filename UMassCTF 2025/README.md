@@ -270,12 +270,101 @@ ffmpeg -i part2.wav -ac 1 mono2.wav
 ffmpeg -i part3.wav -ac 1 mono3.wav
 ```
 
+![Files](img/misc/mono.png)
 
+Next, decoding using baud rates in descending order (as per hint):
 
+```bash
+minimodem --rx -f mono1.wav 100
+minimodem --rx -f mono1.wav 50
+minimodem --rx -f mono1.wav 30
 
+minimodem --rx -f mono2.wav 100
+minimodem --rx -f mono2.wav 50
+minimodem --rx -f mono2.wav 30
 
+minimodem --rx -f mono3.wav 100
+minimodem --rx -f mono3.wav 50
+minimodem --rx -f mono3.wav 30
+```
 
+This is the output from those extraction:
 
+**mono1.wav**:
+
+```bash
+### CARRIER 100 @ 1250.0 Hz ###
+VEFHXzA1ID0gWlhKZmFBbz0KVEFHXzAyID0gWVhOb1h3bz0KVEFHXzAwID0gVlUxQlV3bz0KVEFH
+```
+
+**mono2.wav**:
+
+```bash
+### CARRIER 50.00 @ 1590.0 Hz ###
+XzA0ID0gWDNSdmR3bz0KVEFHXzAxID0gVTN0bWJBbz0KVEFHXzA2ID0gWlhKMGVnbz0KVEFHXzAz
+```
+
+**mono3.wav**:
+
+```bash
+### CARRIER 30.00 @ 1590.0 Hz ###
+ID0gWVhOdGNnbz0K
+```
+
+It is a `base64` encoded value. Decode that from `base64`.
+
+**mono1.wav**:
+
+```bash
+TAG_05 = ZXJfaAo=
+TAG_02 = YXNoXwo=
+TAG_00 = VU1BUwo=
+TAG
+```
+
+**mono2.wav**:
+
+```bash
+_04 = X3Rvdwo=
+TAG_01 = U3tmbAo=
+TAG_06 = ZXJ0ego=
+TAG_03
+```
+
+**mono3.wav**:
+
+```bash
+### CARRIER 30.00 @ 1590.0 Hz ###
+ = YXNtcgo=
+```
+
+To simplify, this is the rearranged:
+
+```bash
+TAG_05 = ZXJfaAo=
+TAG_02 = YXNoXwo=
+TAG_00 = VU1BUwo=
+TAG_04 = X3Rvdwo=
+TAG_01 = U3tmbAo=
+TAG_06 = ZXJ0ego=
+TAG_03 = YXNtcgo=
+```
+
+Then, decode again from `base64` for each tag:
+
+```bash
+TAG_05 = er_h
+TAG_02 = ash_
+TAG_00 = UMAS
+TAG_04 = _tow
+TAG_01 = S{fl
+TAG_06 = ertz
+TAG_03 = asmr
+```
+
+Lastly, just rearrange following the order.
+
+Flag: **UMASS{flash_asmr_tower_hertz}**
 
 
 
