@@ -219,6 +219,11 @@ Flag: **UMASS{qrongratulations}**
 ### Description
 > A glitched tower is still transmitting bursts of scrambled config data through its last known soundtrack. The signal isn’t digital — it’s modulated. Different baud rates. One forgotten directive.
 
+<details>
+  <summary>View Hint</summary>
+The flag data that you get from the signals is missing a closing curly brace. Make sure to add it in when you submit the flag!
+</details>
+
 [last_output.wav](misc/towersignal)
 
 
