@@ -18,7 +18,7 @@
 ### Description
 > I don't believe in updating my computer, it just takes so long! Besides, no one could ever hack me, I use good passwords!
 
-[chall.pcapng](forensics/noupdates/chall.pcapng) 
+[chall.pcapng](forensics/noupdates) 
 
 ---
 
@@ -70,7 +70,7 @@ Flag: **UMASS{n07_ag41n_d4mn_y0u_m3t4spl017}**
 >
 > Use `23ab3Y9/]jKl` as the password when extracting the password-protected zip archive.
 
-[macrotrace-assets.zip](forensics/macrotrace/macrotrace-assets.zip)
+[macrotrace-assets.zip](forensics/macrotrace)
 
 
 
