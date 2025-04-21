@@ -18,7 +18,7 @@
 ### Description
 > I don't believe in updating my computer, it just takes so long! Besides, no one could ever hack me, I use good passwords!
 
-[Download chall.pcapng](forensics/NoUpdates/chall.pcapng)
+[chall.pcapng](forensics/No Updates/chall.pcapng)
 
 
 ---
