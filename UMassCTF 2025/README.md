@@ -203,6 +203,16 @@ b4,bgr,lsb,xy       .. file: PDP-11 UNIX/RT ldp
 
 Then I use [aperisolve](https://www.aperisolve.com/): 
 
+![Aperisolve](img/misc/aperisolve.png)
+
+I looked at the common passwords which is **UMASS{{rcckuizufzxhznod}}** and **Bloxorz**.
+
+Basically **Bloxorz** is a game on coolmath games and it's a key for a cipher which is Vigenere cipher.
+
+Lastly, just decode it
+
+![Flag](img/misc/flag2.png)
+
 
 
 
