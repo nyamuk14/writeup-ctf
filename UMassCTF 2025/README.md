@@ -36,3 +36,18 @@ After serveral minutes talking with my bestfriend. gpt gave me this filter comma
 frame contains "flag"
 ```
 
+![Filter Command](img/forensics/filter.png)
+
+Then, I tried to follow `TCP` stream. Maybe I can find something there?
+
+![TCP Stream](img/forensics/flag1.png)
+
+Found it. 
+
+So, basically in forensics chall. Typically it consist of finding inside the files. You just can filter out for the flag. 
+
+This is another solution:
+
+
+
+
