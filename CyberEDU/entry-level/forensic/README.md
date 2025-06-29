@@ -109,4 +109,20 @@ The content of the flag is ca314be22457497e81a08fc3bfdbdcd3e0e443c41b5ce9802517b
 
 Flag: **CTF{ca314be22457497e81a08fc3bfdbdcd3e0e443c41b5ce9802517b2161aa5e993}**
 
+---
+
+### xo.rar
+
+### Description
+> Not just a rar.
+>
+> About the challenge
+> The challenge was initially published at European Cyber Security Challenge 2019 - the national phase organised in Romania. The challenge was created by Bit Sentinel, a top-notch team of specialists in cyber security.
+>
+> European Cyber Security Challenge (ECSC) is the annual European event that brings together young talent from across Europe to have fun and compete in cybersecurity!
+
+`xo.rar`
+
+### Solution
+
 
