@@ -3,8 +3,8 @@
 ## Table of Contents
 
 ### Forensics
-1. [Alternating](#Alternating)
-2. [BBBBBBBBBB](#BBBBBBBBBB)
+1. [Alternating](#alternating)
+2. [BBBBBBBBBB](#bbbbbbbbbbb)
 3. [basic-coms](#basic-coms)
 
 ---
@@ -26,18 +26,28 @@ Suspecting the use of NFTS [Alternate Data Streams](https://owasp.org/www-commun
 ```bash
 dir /r
 ```
-[alternating1.png](CyberEDU/entry-level/forensic/img)
+![alternating1](img/alternating1.png)
 
-### Macrotrace
+This revealed an ADS: `Flag.txt.txt:real_flag.txt:$DATA`
+
+To access the hidden content, used this command:
+
+```bash
+more < Flag.txt.txt:real_flag.txt
+```
+
+This will displayed the hidden content, which is the flag.
+
+![alternating2](img/alternating2.png)
+
+The flag: **ctf{7ce5567830a2f9f8ce8a7e39856adfe5208242f6bce01ca9af1a230637d65a2d}**
+
+### BBBBBBBBBB
 
 ### Desciption
-> A suspicious spreadsheet surfaced from the archive of a defunct Flash game studio. Opening it does... something, but whatever was there is now gone.
->
-> Your mission: reverse the macro, trace what it did, and recover the flag it tried to destroy.
->
-> Use `23ab3Y9/]jKl` as the password when extracting the password-protected zip archive.
+> BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 
-[macrotrace-assets.zip](forensics/macrotrace)
+`chall-zip-in-zip.zip`
 
 
 ### Solution
