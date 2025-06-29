@@ -82,7 +82,31 @@ Flag: **TFCTF{the_fl4g_1s_th3_w4y}**
 
 ### Solution
 
-We're given a PCAPNG file containing captured network traffic and asked to find a SHA-256 hash-style flag.
+We're given a pcapng file containing captured network traffic and asked to find a SHA-256 hash-style flag.
 
+Next open the pcapng file in wireshark, we can see there is a lot of packets here.
+
+![basic-coms1](img/basic-coms1.png)
+
+But. since the challenge hinted at basic communication, I applied an HTTP filter:
+
+```bash
+http
+```
+![basic-coms2](img/basic-coms2.png)
+
+This revealed a suspicious GET request:
+
+```bash
+GET /?important=The%20content%20of%20the%20f%20l%20a%20g%20is%20ca314be22457497e81a08fc3bfdbdcd3e0e443c41b5ce9802517b2161aa5e993%20and%20respects%20the%20format HTTP/1.1\r\n
+```
+
+Decoded the URL-encoded content, and you will get this:
+
+```bash
+The content of the flag is ca314be22457497e81a08fc3bfdbdcd3e0e443c41b5ce9802517b2161aa5e993 and respects the format
+```
+
+Flag: **CTF{ca314be22457497e81a08fc3bfdbdcd3e0e443c41b5ce9802517b2161aa5e993}**
 
 
